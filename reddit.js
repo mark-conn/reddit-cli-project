@@ -42,6 +42,20 @@ This function should "return" the posts on the front page of a subreddit as an a
 
 function getSubreddit(subreddit, callback) {
   var trimmedLowerCase = subreddit.trim().toLowerCase();
+  requestAsJson('https://reddit.com'+ trimmedLowerCase + '/.json' , function(err, res) {
+    if (err) {
+      console.log(err);
+      callback(err);
+    }
+    else {
+
+        callback(null, res.data.children); 
+    }
+  });
+}
+
+function getSubreddit2(subreddit, callback) {
+  var trimmedLowerCase = subreddit.trim().toLowerCase();
   requestAsJson('https://reddit.com/r/'+ trimmedLowerCase + '/.json' , function(err, res) {
     if (err) {
       console.log(err);
@@ -98,5 +112,6 @@ module.exports = {
   getSortedHomepage: getSortedHomepage,
   getSortedSubreddit: getSortedSubreddit,
   getSubreddits: getSubreddits,
-  getSubreddit: getSubreddit
+  getSubreddit: getSubreddit,
+  getSubreddit2: getSubreddit2
 };
