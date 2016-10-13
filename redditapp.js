@@ -16,7 +16,7 @@ var homePageCategories = {
     type: 'list',
     name: 'direction',
     message: 'Pick a Category',
-    choices: ['hot', 'new', 'rising', 'controversial', 'top', 'gilded', 'wiki', 'promoted' ]
+    choices: ['hot', 'new', 'rising', 'controversial', 'top', 'gilded', 'wiki', 'promoted', new inquirer.Separator(), 'Go Back', new inquirer.Separator()]
 }
 
 //inquirer object with array of subreddits
@@ -26,14 +26,14 @@ var subreddits = {
     message: 'Pick a Subreddit',
     choices: ["FRONT", "ALL", "RANDOM", "ASKREDDIT", "FUNNY", "PICS", "GIFS",
    "TODAYILEARNED", "VIDEO", "WORLDNEWS", "GAMING", "NEWS", "AWW", "SHOWERTHOUGHTS", "MOVIES",
-   "MILDLYINTERESTING", "JOKES", "TELEVISION", "TIFU", "LIFEPROTIPS", "PHOTOSHOPBATTLE"]
+   "MILDLYINTERESTING", "JOKES", "TELEVISION", "TIFU", "LIFEPROTIPS", "PHOTOSHOPBATTLE", new inquirer.Separator(), 'Go Back', new inquirer.Separator()]
 }
 
 var subRedditChoice = {
     type: 'list',
     name: 'direction',
     message: 'Sorted or Popular?',
-    choices: ['Sorted', 'Popular']
+    choices: ['Sorted', 'Popular', new inquirer.Separator(), 'Go Back']
 }
 
 
@@ -64,6 +64,10 @@ function showSubReddits() {
         var subPick = answer.direction;
         if(subPick === 'Sorted') {
             showSubRedditMenu();
+        }
+        else if(subPick === 'Go Back') {
+            firstSelection();   
+        
         } else {
             redditFunctions.getSubreddits(function(err, result){
                 if(err) console.log(err, "error in getting subreddits");
@@ -73,21 +77,29 @@ function showSubReddits() {
 
                     justTitles.push({ title: item.data.title });
                    
-                })
-                console.log(justTitles)
+                });
+                console.log(justTitles);
                 }
-            })
+            });
             
         }
-    })
+    });
     
 }
 
 function showSubRedditMenu() {
+    
     inquirer.prompt(subreddits).then(function (answer) {
+        var subRedditPick = answer.direction;
+        if(subRedditPick === 'Go Back') showSubReddits();
+        else {
+            
         inquirer.prompt(homePageCategories).then(function (nextAnswer) {
-            var subRedditPick = answer.direction;
             var subRedditCatPick = nextAnswer.direction;
+            if(subRedditCatPick === 'Go Back') showSubRedditMenu();
+            else {
+                
+           
             redditFunctions.getSortedSubreddit(subRedditPick, subRedditCatPick, function(err, result) {
                 if(err) console.log(err, "error in getting sorted subreddits");
                 else {
@@ -97,9 +109,11 @@ function showSubRedditMenu() {
                     });
                     
                     console.log(justTitles);
-                    }
+                }
             });
+            } 
         });
+        }
     });
     
 }
@@ -107,6 +121,8 @@ function showSubRedditMenu() {
 function rightToSubreddit() {
     inquirer.prompt(subreddits).then(function (answer) {
         var subRedditPick = answer.direction;
+        if(subRedditPick === 'Go Back') firstSelection();
+        else {
         redditFunctions.getSubreddit(subRedditPick, function(err, result) {
             if(err) console.log(err, "error going to subreddit");
             else {
@@ -118,12 +134,10 @@ function rightToSubreddit() {
             }
             
         });
+        }
     });
     
 }
-
-
-
 
 
 //initiate this app
@@ -135,7 +149,7 @@ function main() {
 
 //first menu options, branch off into different possibilities
 function firstSelection() {
-      inquirer.prompt(mainMenuPromt).then(function (answer) {
+    inquirer.prompt(mainMenuPromt).then(function (answer) {
           
     if (answer.direction === 'Show Homepage') {
         console.log("going to homepage...");

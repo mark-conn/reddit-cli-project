@@ -16,14 +16,6 @@ function getHomepage(callback) {
   });
 }
 
-// getHomepage(function(err, result){
-//   if(err) console.log(err, "Error!");
-//   else {
-//     console.log(result)
-//   }
-// })
-
-
 /*
 This function should "return" the default homepage posts as an array of objects.
 In contrast to the `getHomepage` function, this one accepts a `sortingMethod` parameter.
@@ -42,13 +34,6 @@ function getSortedHomepage(sortingMethod, callback) {
     }
   });
 }
-
-// getSortedHomepage('controversial', function(err, result) {
-//     if (err) console.log(err, "error calling sorted homepage");
-//     else {
-//         console.log(result);
-//     }
-// });
 
 
 /*
@@ -70,14 +55,6 @@ function getSubreddit(subreddit, callback) {
 }
 
 
-
-// getSubreddit('lolcats', function(err, result) {
-//   if(err) console.log(err, "error in subreddit call");
-//   else {
-//     console.log(result);
-//   }
-// })
-
 /*
 This function should "return" the posts on the front page of a subreddit as an array of objects.
 In contrast to the `getSubreddit` function, this one accepts a `sortingMethod` parameter.
@@ -98,14 +75,6 @@ function getSortedSubreddit(subreddit, sortingMethod, callback) {
 }
 
 
-
-// getSortedSubreddit('funny', 'controversial', function(err, result) {
-//   if(err) console.log(err, "error calling the sorted subreddit");
-//   else {
-//     console.log(result);
-//   }
-// })
-
 /*
 This function should "return" all the popular subreddits
 */
@@ -121,13 +90,6 @@ function getSubreddits(callback) {
   })
 }
 
-// getSubreddits(function(err, result) {
-//   if(err) console.log(err, "error calling subreddits");
-//   else {
-//     console.log(result);
-//   }
-  
-// })
 
 
 // Export the API
