@@ -16,12 +16,12 @@ function getHomepage(callback) {
   });
 }
 
-getHomepage(function(err, result){
-  if(err) console.log(err, "Error!");
-  else {
-    console.log(result)
-  }
-})
+// getHomepage(function(err, result){
+//   if(err) console.log(err, "Error!");
+//   else {
+//     console.log(result)
+//   }
+// })
 
 
 /*
@@ -37,24 +37,23 @@ function getSortedHomepage(sortingMethod, callback) {
       callback(err);
     }
     else {
-        console.log(res.data.children);
+        console.log("sorting homepage by " + sortingMethod)
         callback(null, res.data.children); 
     }
   });
 }
 
-getSortedHomepage('controversial', function(err, result) {
-    if (err) console.log(err, "error calling sorted homepage");
-    else {
-        console.log(result);
-    }
-});
+// getSortedHomepage('controversial', function(err, result) {
+//     if (err) console.log(err, "error calling sorted homepage");
+//     else {
+//         console.log(result);
+//     }
+// });
 
 
 /*
 This function should "return" the posts on the front page of a subreddit as an array of objects.
 */
-
 
 function getSubreddit(subreddit, callback) {
   var trimmedLowerCase = subreddit.trim().toLowerCase();
@@ -72,12 +71,12 @@ function getSubreddit(subreddit, callback) {
 
 
 
-getSubreddit('lolcats', function(err, result) {
-  if(err) console.log(err, "error in subreddit call");
-  else {
-    console.log(result);
-  }
-})
+// getSubreddit('lolcats', function(err, result) {
+//   if(err) console.log(err, "error in subreddit call");
+//   else {
+//     console.log(result);
+//   }
+// })
 
 /*
 This function should "return" the posts on the front page of a subreddit as an array of objects.
@@ -94,19 +93,18 @@ function getSortedSubreddit(subreddit, sortingMethod, callback) {
       if (err) console.log(err, "error in subreddit sorted");
       else {
         callback(null, result.data.children);
-
       }
     });
 }
 
 
 
-getSortedSubreddit('funny', 'controversial', function(err, result) {
-  if(err) console.log(err, "error calling the sorted subreddit");
-  else {
-    console.log(result);
-  }
-})
+// getSortedSubreddit('funny', 'controversial', function(err, result) {
+//   if(err) console.log(err, "error calling the sorted subreddit");
+//   else {
+//     console.log(result);
+//   }
+// })
 
 /*
 This function should "return" all the popular subreddits
@@ -123,13 +121,14 @@ function getSubreddits(callback) {
   })
 }
 
-getSubreddits(function(err, result) {
-  if(err) console.log(err, "error calling subreddits");
-  else {
-    console.log(result);
-  }
+// getSubreddits(function(err, result) {
+//   if(err) console.log(err, "error calling subreddits");
+//   else {
+//     console.log(result);
+//   }
   
-})
+// })
+
 
 // Export the API
 module.exports = {
