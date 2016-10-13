@@ -1,6 +1,7 @@
 var inquirer = require('inquirer');
 var requestAsJson = require('./request-json.js').requestAsJson;
 var redditFunctions = require('./reddit.js');
+var colour = require('colour');
 
 
 //inquierer object with array of initial menu options
@@ -36,25 +37,60 @@ var subRedditChoice = {
     choices: ['Sorted', 'Popular', new inquirer.Separator(), 'Go Back']
 }
 
+function displayPosts(result) {
+var post = [];
+post.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
+                    
+                    result.forEach(function(item) {
+                        post.push(
+                            {
+                             name: item.data.title,
+                             value: {
+                                 title: item.data.title,
+                                 url: item.data.url,
+                                 author: item.data.author
+
+                             } }
+                            )
+                    });
+                    
+                    var postSelector = {
+                        type: 'list',
+                        name: 'direction',
+                        message: 'Pick a Post',
+                        choices: post
+                    };
+
+                    inquirer.prompt(postSelector).then(function(answer){
+                        var postPick = answer.direction
+                        if(postPick === 'Go Back') firstSelection()
+                        else {
+                        console.log(postPick.title);
+                        console.log(postPick.url.blue.underline);
+                        console.log(postPick.author.red);
+                        }
+                        
+                    })
+                    
+}
+
 
 function sortHomePage() {
     inquirer.prompt(homePageCategories).then(function (answer) {
       var homePagePick = answer.direction;
+      if(homePagePick === 'Go Back') firstSelection();
+      else {
       redditFunctions.getSortedHomepage(homePagePick, function(err, result) {
           if(err) console.log(err, "error picking category");
           else {
                 if(homePagePick === 'wiki') console.log(result);
                 else {
-                var justTitles = [];
-                result.forEach(function(item){
-
-                    justTitles.push({ title: item.data.title });
-                   
-                })
-                console.log(justTitles) };
+                displayPosts(result);
+                };
           }
           }
       );
+      }
     })
 }
 
@@ -72,13 +108,7 @@ function showSubReddits() {
             redditFunctions.getSubreddits(function(err, result){
                 if(err) console.log(err, "error in getting subreddits");
                 else {
-                var justTitles = [];
-                result.forEach(function(item){
-
-                    justTitles.push({ title: item.data.title });
-                   
-                });
-                console.log(justTitles);
+                displayPosts(result);
                 }
             });
             
@@ -103,12 +133,7 @@ function showSubRedditMenu() {
             redditFunctions.getSortedSubreddit(subRedditPick, subRedditCatPick, function(err, result) {
                 if(err) console.log(err, "error in getting sorted subreddits");
                 else {
-                    var justTitles = [];
-                    result.forEach(function(item) {
-                        justTitles.push({title: item.data.title});
-                    });
-                    
-                    console.log(justTitles);
+                    displayPosts(result);
                 }
             });
             } 
@@ -126,11 +151,7 @@ function rightToSubreddit() {
         redditFunctions.getSubreddit(subRedditPick, function(err, result) {
             if(err) console.log(err, "error going to subreddit");
             else {
-                    var justTitles = [];
-                    result.forEach(function(item) {
-                        justTitles.push({title: item.data.title});
-                    });
-                    console.log(justTitles);
+                    displayPosts(result);
             }
             
         });
@@ -156,15 +177,8 @@ function firstSelection() {
         redditFunctions.getHomepage(function(err, result){
             if(err) console.log(err, "Error getting homepage");
             else { 
-                
-                //functionality to filter the object in the callback...
-                var justTitles = [];
-                result.forEach(function(item){
-                    justTitles.push({ title: item.data.title });
-                })
-                 console.log(justTitles) 
-                };
-                
+                    displayPosts(result);
+                }
         });
     }
     
