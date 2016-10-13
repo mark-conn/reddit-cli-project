@@ -19,7 +19,7 @@ var homePageCategories = {
     name: 'direction',
     message: 'Pick a Category',
     choices: ['hot', 'new', 'rising', 'controversial', 'top', 'gilded', 'wiki', 'promoted', new inquirer.Separator(), 'Go Back', new inquirer.Separator()]
-}
+};
 
 //inquirer object with array of subreddits
 var subreddits = {
@@ -53,7 +53,7 @@ post.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
                                  author: item.data.author
 
                              } }
-                            )
+                            );
                     });
                     
                     var postSelector = {
@@ -88,8 +88,8 @@ post.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
                             var selection = answer.direction;
                             if(selection === 'Yes') firstSelection();
                             else {};
-                        })
-                    })
+                        });
+                    });
                     
 }
 
@@ -110,7 +110,7 @@ function sortHomePage() {
           }
       );
       }
-    })
+    });
 }
 
 function displayPostsSpecial(result) {

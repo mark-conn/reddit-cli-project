@@ -93,7 +93,6 @@ function getSortedSubreddit(subreddit, sortingMethod, callback) {
 This function should "return" all the popular subreddits
 */
 
-
 function getSubreddits(callback) {
   // Load reddit.com/subreddits.json and call back with an array of subreddits
   requestAsJson('https://reddit.com/subreddits.json', function(err, result) {

@@ -18,7 +18,7 @@ var homePageCategories = {
     type: 'list',
     name: 'direction',
     message: 'Pick a Category',
-    choices: ['hot', 'new', 'rising', 'controversial', 'top', 'gilded', 'wiki', 'promoted', new inquirer.Separator(), 'Go Back', new inquirer.Separator()]
+    choices: ['hot', 'new', 'rising', 'controversial', 'top', 'gilded', 'wiki', 'ads', new inquirer.Separator(), 'Go Back', new inquirer.Separator()]
 }
 
 //inquirer object with array of subreddits
