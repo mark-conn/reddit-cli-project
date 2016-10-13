@@ -2,6 +2,7 @@ var inquirer = require('inquirer');
 var requestAsJson = require('./request-json.js').requestAsJson;
 var redditFunctions = require('./reddit.js');
 var colour = require('colour');
+const imageToAscii = require("image-to-ascii");
 
 
 //inquierer object with array of initial menu options
@@ -37,6 +38,7 @@ var subRedditChoice = {
     choices: ['Sorted', 'Popular', new inquirer.Separator(), 'Go Back']
 }
 
+
 function displayPosts(result) {
 var post = [];
 post.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
@@ -60,16 +62,33 @@ post.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
                         message: 'Pick a Post',
                         choices: post
                     };
+                    
+                    var goHome = {
+                        type: 'list',
+                        name: 'direction',
+                        message: 'Back to main menu?',
+                        choices: ['Yes', 'No']
+                    };
 
                     inquirer.prompt(postSelector).then(function(answer){
-                        var postPick = answer.direction
-                        if(postPick === 'Go Back') firstSelection()
+                        var postPick = answer.direction;
+                        if(postPick === 'Go Back') firstSelection();
                         else {
+                        
+                        var imageCli = imageToAscii(postPick.url, (err, converted) => {
+                            console.log(err, "Not an image file" || converted);
+                        });  
+                            
                         console.log(postPick.title);
                         console.log(postPick.url.blue.underline);
                         console.log(postPick.author.red);
+                        console.log(imageCli);
                         }
-                        
+                        inquirer.prompt(goHome).then(function(answer){
+                            var selection = answer.direction;
+                            if(selection === 'Yes') firstSelection();
+                            else {};
+                        })
                     })
                     
 }
@@ -108,13 +127,11 @@ function showSubReddits() {
             redditFunctions.getSubreddits(function(err, result){
                 if(err) console.log(err, "error in getting subreddits");
                 else {
-                displayPosts(result);
+                    displayPosts(result);
                 }
             });
-            
         }
-    });
-    
+});
 }
 
 function showSubRedditMenu() {

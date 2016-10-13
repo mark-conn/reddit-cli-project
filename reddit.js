@@ -48,7 +48,7 @@ function getSubreddit(subreddit, callback) {
       callback(err);
     }
     else {
-        // console.log(res.data.children);
+
         callback(null, res.data.children); 
     }
   });
