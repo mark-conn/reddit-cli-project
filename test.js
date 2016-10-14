@@ -18,8 +18,8 @@ var homePageCategories = {
     type: 'list',
     name: 'direction',
     message: 'Pick a Category',
-    choices: ['hot', 'new', 'rising', 'controversial', 'top', 'gilded', 'wiki', 'promoted', new inquirer.Separator(), 'Go Back', new inquirer.Separator()]
-};
+    choices: ['hot', 'new', 'rising', 'controversial', 'top', 'gilded', 'wiki', 'ads', new inquirer.Separator(), 'Go Back', new inquirer.Separator()]
+}
 
 //inquirer object with array of subreddits
 var subreddits = {
@@ -50,7 +50,8 @@ post.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
                              value: {
                                  title: item.data.title,
                                  url: item.data.url,
-                                 author: item.data.author
+                                 author: item.data.author,
+                                 comments: item.data.permalink
 
                              } }
                             );
@@ -66,8 +67,8 @@ post.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
                     var goHome = {
                         type: 'list',
                         name: 'direction',
-                        message: 'Back to main menu?',
-                        choices: ['Yes', 'No']
+                        message: 'Back to main menu or see comments?',
+                        choices: ['Main Menu', 'Comments']
                     };
 
                     inquirer.prompt(postSelector).then(function(answer){
@@ -76,6 +77,7 @@ post.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
                         else {
                         
                         var imageCli = imageToAscii(postPick.url, (err, converted) => {
+                            err = "Not an image";
                             console.log(err || converted);
                         });  
                         console.log('\033[2J');    
@@ -83,35 +85,24 @@ post.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
                         console.log(postPick.url.blue.underline);
                         console.log(postPick.author.red);
                         console.log(imageCli);
-                        }
                         inquirer.prompt(goHome).then(function(answer){
                             var selection = answer.direction;
-                            if(selection === 'Yes') firstSelection();
-                            else {};
+                            if(selection === 'Main Menu') firstSelection();
+                            // else {
+                            //   getComments(postPick.comments, function(err, result){
+                            //       if(err) console.log("error using getComments function");
+                            //       else {
+                            //           console.log(result);
+                            //       }
+                            //   }); 
+                                
+                            // };
                         });
+                        }
                     });
-                    
 }
 
 
-function sortHomePage() {
-    inquirer.prompt(homePageCategories).then(function (answer) {
-      var homePagePick = answer.direction;
-      if(homePagePick === 'Go Back') firstSelection();
-      else {
-      redditFunctions.getSortedHomepage(homePagePick, function(err, result) {
-          if(err) console.log(err, "error picking category");
-          else {
-                if(homePagePick === 'wiki') console.log(result);
-                else {
-                displayPosts(result);
-                };
-          }
-          }
-      );
-      }
-    });
-}
 
 function displayPostsSpecial(result) {
     var post = [];
@@ -157,13 +148,40 @@ function displayPostsSpecial(result) {
                                 }
                             });
                         }
-                        inquirer.prompt(goHome).then(function(answer){
-                            var selection = answer.direction;
-                            if(selection === 'Yes') firstSelection();
-                            else {};
-                        })
-                    })
-                    
+                    });
+}
+
+// function getComments (url, callback) {
+// url = "https://www.reddit.com" + url;
+//     requestAsJson(url, function(err, result) {
+//         if(err) callback(err);
+//         else {
+//         console.log("showing comments...")
+//         callback(null, result.data.children);
+//         }
+//     });
+// }
+
+
+
+
+function sortHomePage() {
+    inquirer.prompt(homePageCategories).then(function (answer) {
+      var homePagePick = answer.direction;
+      if(homePagePick === 'Go Back') firstSelection();
+      else {
+      redditFunctions.getSortedHomepage(homePagePick, function(err, result) {
+          if(err) console.log(err, "error picking category");
+          else {
+                if(homePagePick === 'wiki') console.log(result);
+                else {
+                displayPosts(result);
+                };
+          }
+          }
+      );
+      }
+    });
 }
 
 
@@ -233,6 +251,7 @@ function showSubRedditMenu() {
     
 }
 
+
 function rightToSubreddit() {
     inquirer.prompt(subreddits).then(function (answer) {
         var subRedditPick = answer.direction;
@@ -241,7 +260,6 @@ function rightToSubreddit() {
         redditFunctions.getSubreddit2(subRedditPick, function(err, result) {
             if(err) console.log(err, "error going to subreddit");
             else {
-                    // console.log(result);
                 displayPosts(result);
             }
             
@@ -254,6 +272,7 @@ function rightToSubreddit() {
 
 //initiate this app
 function main() {
+  console.log('\033[2J'); 
   console.log('Welcome to Reddit, pick an option!');
   firstSelection();
 }
@@ -264,6 +283,7 @@ function firstSelection() {
     inquirer.prompt(mainMenuPromt).then(function (answer) {
           
     if (answer.direction === 'Show Homepage') {
+        console.log('\033[2J'); 
         console.log("going to homepage...");
         redditFunctions.getHomepage(function(err, result){
             if(err) console.log(err, "Error getting homepage");
@@ -274,16 +294,19 @@ function firstSelection() {
     }
     
         else if(answer.direction === 'Show Subreddits Page') {
+            console.log('\033[2J'); 
             console.log("going to the subreddits...");
             showSubReddits();
     }
     
         else if(answer.direction === 'Show Homepage Sorted by Category') {
+            console.log('\033[2J'); 
             console.log("sorting homepage...");
             sortHomePage();
             }
             
         else if(answer.direction === 'Go to a Subreddit') {
+            console.log('\033[2J'); 
             console.log("pick a subreddit");
             rightToSubreddit();
         }
