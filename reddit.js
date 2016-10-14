@@ -54,6 +54,7 @@ function getSubreddit(subreddit, callback) {
   });
 }
 
+//changed request 'text' so that it can take a single word and not a 'url' property of the object
 function getSubreddit2(subreddit, callback) {
   var trimmedLowerCase = subreddit.trim().toLowerCase();
   requestAsJson('https://reddit.com/r/'+ trimmedLowerCase + '/.json' , function(err, res) {
@@ -62,7 +63,6 @@ function getSubreddit2(subreddit, callback) {
       callback(err);
     }
     else {
-
         callback(null, res.data.children); 
     }
   });

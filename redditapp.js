@@ -141,7 +141,7 @@ function displayPostsSpecial(result) {
                         var postPick = answer.direction;
                         if(postPick === 'Go Back') firstSelection();
                         else {
-                            // console.log(postPick)
+
                             redditFunctions.getSubreddit(postPick.url, function(err, result){
                                 if(err) console.log(err, "latest damn error");
                                 else {
@@ -155,7 +155,6 @@ function displayPostsSpecial(result) {
 
 function getComments (url, callback) {
 url = "https://www.reddit.com" + url + ".json";
-console.log(url);
     request(url, function(err, result) {
         if(err) callback(err);
         else {
@@ -168,6 +167,8 @@ console.log(url);
 function getReplies(result) {
     var replyBodies = [];
     var commentReplies = result[1].data.children;
+    replyBodies.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
+    
     commentReplies.forEach(function(obj) {
         replyBodies.push({
             name: obj.data.body,
@@ -187,10 +188,41 @@ function getReplies(result) {
         
         inquirer.prompt(postSelector).then(function(answer) {
             var postPick = answer.direction;
-            if(postPick === 'Go Back') firstSelection();
+            if(postPick === 'Go Back') getReplies(replyBodies);
             else {
-             if(postPick.replies)  displayPosts(postPick.replies);
-                else { console.log("No replyyyyyyyy"); }
+                  getSubReplies(postPick.replies.data.children);
+            }
+        });
+}
+
+function getSubReplies(result) {
+    var replyBodies = [];
+
+    replyBodies.push(new inquirer.Separator(), "Go Back", new inquirer.Separator());
+    
+    result.forEach(function(obj) {
+        replyBodies.push({
+            name: obj.data.body,
+            value: {
+                title: obj.data.body,
+                author: obj.data.author,
+                replies: obj.data.replies
+                }});
+         });
+    
+        var postSelector = {
+            type: 'list',
+            name: 'direction',
+            message: 'Pick a Post',
+            choices: replyBodies
+        };
+        
+        inquirer.prompt(postSelector).then(function(answer) {
+            var postPick = answer.direction;
+            if(postPick === 'Go Back') getReplies(replyBodies);
+            else {
+                if(postPick.replies)  getSubReplies(postPick.replies.data.children);
+                else { console.log("No Replies"); }
             }
         });
 }

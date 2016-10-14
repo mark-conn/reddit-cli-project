@@ -8,7 +8,7 @@ function requestAsJson(url, cb) {
                     cb(null, JSON.parse(input.body))
                 }
                 catch(error) {
-                    console.log(error,"error is here")
+                    console.log(error,"error is in JSON request")
                     cb(error);
                 }
              }
